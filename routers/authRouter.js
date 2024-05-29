@@ -3,3 +3,7 @@ const express = require("express");
 const router = express.Router();
 // importo il controller
 const authController = require("../controllers/Auth");
+
+router.post("/", authController.login);
+
+module.exports = router;

@@ -1,6 +1,7 @@
 // importo e inizializzo express
 const express = require("express");
 const app = express();
+require("dotenv").config();
 const port = process.env.PORT || 8080;
 
 // setto i middlewares
@@ -12,15 +13,17 @@ app.use(morgan('dev'));
 
 //importo le routes
 const postRouter = require("./routers/postRouter");
-// const authRouter = require("./routers/authRouter");
+const authRouter = require("./routers/authRouter");
 
 
 
 // rotta di default
 app.get('/',(req,res) =>{
-    res.redirect('/posts');
+    res.send('<h1>Autenticati per accedere</h1>');
 });
 
+// rotta di auth
+app.use("/login", authRouter);
 
 // rotta posts
 app.use('/posts', postRouter);
