@@ -5,7 +5,10 @@ function deleteAssistant(req, res, next) {
     const reqSlug = req.params.slug;
     const postToDestroy = blogPosts.find(post => post.slug === reqSlug);
     if(!postToDestroy){  
-        return res.status(404).send(`Ci dispiace, non abbiamo trovato il post che vuoi eliminare`);
+        return res.status(404).json({
+            error: "404",
+            message: "Post non trovato"
+        });
     }
     req.postToDestroy = postToDestroy;
     console.log(req.postToDestroy);

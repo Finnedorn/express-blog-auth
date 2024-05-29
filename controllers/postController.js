@@ -6,6 +6,9 @@ let blogPosts = require("../db/db-blog.json");
 const { json } = require("express");
 // storo in una const il contenuto a cui dovrò fare replace() nell'html
 const placeHolder = "{{placeholder}}";
+
+
+
 // creo una funzione di replacement dei contenuti in htnl 
 function pageContentReplacer(oldcontent, content) {
     const filePath = path.join(__dirname, "../page.html");
@@ -16,7 +19,7 @@ function jsonUpdater(newContent){
     // estrapolo il percorso del json
     const filePath = path.join(__dirname, "../db/db-blog.json");
     // modifico il file aggiungendo il nuovo contenuto, adesso convertito in formato adatto
-    fs.writeFileSync(filePath, JSON.stringify(newContent));
+    fs.writeFileSync(filePath, JSON.stringify(newContent, null, 2));
     // affinchè il sistema non richiami il json più volte 
     // associo alla var che hostava il json, il valore del nuovo contenuto
     blogPosts = newContent;

@@ -1,13 +1,28 @@
+// importo jsonWebToken 
+const jwt = require("jsonwebtoken");
+require("dotenv").config();
 // importo e leggo il JSON
 let users = require("../db/db-users.json");
-// importo il middleware
-const {tokenGenerator} = require("../middlewares/jwt");
 
+
+// creo una funzione di middleware per generare il token alla chiamata /login
+function tokenGenerator(user) {
+    // creo il token tramite il metood sign di jwt
+    // sign accetta 3 parametri: l'oggetto user, la key che ho storato nell'env e un oggetto con la durata del token
+    const newToken = jwt.sign(user, process.env.JWT_SECRET, {expiresIn: "2m"});
+    return newToken;
+};
+
+// funzione di login 
 function login(req, res) {
+    // prendo i valori inviati dall'utente dal request body 
     const {username, password} = req.body;
+    // con un find cerco l'elemento nell'array
     const loginUser = users.find(user => user.username === username && user.password === password);
     if(loginUser){
+        // genero il token per l'utente
         const token = tokenGenerator(loginUser);
+        // lo mando in risposta tramite json
         res.json({token});
     }else{
         res.status(404).json({
@@ -17,6 +32,53 @@ function login(req, res) {
     }
 };
 
+// funzione di middleware per controllare il token
+function tokenChecker(req, res, next) {
+    // prendo i valori inviati dall'utente nell'header della request
+    // in postman -> headers -> authorization: 'Bearer ' + token
+    const authToken = req.headers.authorization;
+    if(!authToken) {
+        return res.status(401).json({
+            error: "401",
+            message: "Necessiti di un token per accedere a questa route"
+        });
+
+    }
+    // splitto il token per togliere il suffisso Bearer
+    // e mi storo in tokenSplitted solo il valore del token
+    const tokenSplitted = authToken.split(" ")[1];
+
+    // verifico il token con il metodo verify
+    // accetta 2 parametri: il token, la key che ho storata nell'env
+    // inoltre mi restituisce un callback con 2 parametri: err e user 
+    jwt.verify(tokenSplitted, process.env.JWT_SECRET, (err, user) => {
+        if(err) {
+            return res.status(403).json({
+                error: "403",
+                message: "Token scaduto"
+            });
+        }
+        // se il token è valido l'utente non incapperà nel catch
+        req.user = user;
+        next();
+    });
+}
+
+// funzione di middleware per controllare che l'utente sia admin
+function adminChecker(req, res, next) {
+    // se l'utente non ha admin restituisco un 403
+    if(req.user.role !== "admin") {
+        return res.status(403).json({
+            error: "403",
+            message: "Non hai il permesso di accedere a questa route"
+        });
+    }
+    // altrimenti puo continuare l'operazione
+    next();
+}
+
 module.exports= {
-    login
+    login,
+    tokenChecker,
+    adminChecker
 }

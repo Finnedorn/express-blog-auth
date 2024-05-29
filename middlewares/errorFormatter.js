@@ -1,6 +1,4 @@
-const { error } = require("console");
-
-function errorFormatter(err,req,res,next){
+function errorFormatter(err, req, res, next){
     const statusCode = 500;
     res.format({
         html: () => res.status(statusCode).send(err.message),
