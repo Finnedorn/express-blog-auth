@@ -2,7 +2,7 @@
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
 
-function authChecker(req, res, next) {
+function tokenChecker(req, res, next) {
     const authToken = req.headers.authorization;
     if(!authToken) {
         return res.status(401).json({
@@ -25,4 +25,17 @@ function authChecker(req, res, next) {
     });
 }
 
-module.exports = authChecker;
+function adminChecker(req, res, next) {
+    if(req.user.role !== "admin") {
+        return res.status(403).json({
+            error: "403",
+            message: "Non hai il permesso di accedere a questa route"
+        });
+    }
+    next();
+}
+
+module.exports = {
+    tokenChecker,
+    adminChecker
+};

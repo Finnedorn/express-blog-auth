@@ -19,7 +19,7 @@ const authRouter = require("./routers/authRouter");
 
 // rotta di default
 app.get('/',(req,res) =>{
-    res.send('<h1>Autenticati per accedere</h1>');
+    res.redirect("/posts");
 });
 
 // rotta di auth

@@ -1,22 +1,27 @@
 [
     {
         "username": "Nunzia",
-        "password": "password1"
+        "password": "password1",
+        "role": "user"
     },
     {
         "username": "Michele",
-        "password": "password2"
+        "password": "password2",
+        "role": "admin"
     },
     {
         "username": "Gennarino",
-        "password": "password3"
+        "password": "password3",
+        "role": "user"
     },
     {
         "username": "Mattia",
-        "password": "password4"
+        "password": "password4",
+        "role": "admin"
     },
     {
         "username": "Danilo",
-        "password": "password5"
+        "password": "password5",
+        "role": "user"
     }
 ]

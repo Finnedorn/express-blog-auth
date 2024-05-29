@@ -9,7 +9,7 @@ const multer = require("multer");
 const storage = multer({dest: "public"});
 const postDataValidator = require("../middlewares/postDataValidator");
 const deleteAssistant = require("../middlewares/deleteAssistant");
-const authChecker = require("../middlewares/authKeyChecker");
+const authKeyChecker = require("../middlewares/authKeyChecker");
 
 
 
@@ -20,10 +20,10 @@ router.get("/", postController.index);
 router.get("/:slug", postController.show);
 
 // setto la route post a cui invierò del contenuto col quale aggiornerò l'array/json
-router.post("/", authChecker, storage.single("image"), postDataValidator, postController.store);
+router.post("/", authKeyChecker.tokenChecker, storage.single("image"), postDataValidator, postController.store);
 
 // route per l'eliminazione di un elemento
-router.delete("/:slug", deleteAssistant, postController.destroy);
+router.delete("/:slug", authKeyChecker.tokenChecker, authKeyChecker.adminChecker, deleteAssistant, postController.destroy);
 
 
 

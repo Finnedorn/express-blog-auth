@@ -1,3 +1,5 @@
+let blogPosts = require("../db/db-blog.json");
+
 function deleteAssistant(req, res, next) {
 
     const reqSlug = req.params.slug;
