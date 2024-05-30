@@ -1,3 +1,4 @@
+// funzione middleware per controllare che i dati inviati dall'utente siano validi
 const validatePostData = (req, res, next) => {
 
     const { title, content, tags } = req.body;
@@ -13,10 +14,6 @@ const validatePostData = (req, res, next) => {
     } else if (typeof content !== 'string') {
         return res.status(400).json({ error: "Il campo 'content' deve essere una stringa." });
     }
-
-    // if (!image) {
-    //     return res.status(400).json({ error: "Il campo 'image' è richiesto!" });
-    // }
 
     if (!tags) {
         return res.status(400).json({ error: "Il campo 'tags' è richiesto!" });

@@ -99,9 +99,14 @@ function index(req,res) {
 
 // funzione di store (urlencoded && form-data)
 function store(req, res){
+
+    // se mi è stato inviato un urlencoded/json...
     if (req.is('application/x-www-form-urlencoded') || req.is(json)) {
+        // destrutturo i valori dal req.body
         const {title, content, image, tags} = req.body;
+        // genero lo slug
         const newPostSlug = slugGenerator(title);
+        // genero il nuovo post associando i valori della req.body e lo slug
         const newPost = {
             title,
             slug: newPostSlug,
@@ -109,9 +114,13 @@ function store(req, res){
             image,
             tags
         }
+        // aggiungo il nuovo post all'array
         jsonUpdater([...blogPosts, newPost]);
+
+    // e se mi è stato inviato un form-data...
     }else {
-        const {title, content,tags} = req.body;
+        const {title,content,tags} = req.body;
+        // in caso di form-data, il file è conentuto nella req.file.filename
         const fileImage = req.file? req.file.filename : null;
         const newPostSlug = slugGenerator(title);
         const newPost = {
@@ -123,6 +132,8 @@ function store(req, res){
         }
         jsonUpdater([...blogPosts, newPost]);
     }
+
+    // content negotiation
     res.format({
         html: () =>{
             res.redirect("/posts");
@@ -188,9 +199,12 @@ function show(req,res) {
 
 // funzione di destroy
 function destroy(req, res){
+    // porto dal middleware Deleteassistant il post da eliminare dall'array
     const postToDelete = req.postToDestroy;
+    // elimino l'immagine associata al post da eliminare
     fileDestroyer(postToDelete.image);
-    const postlessJson = blogPosts.filter(post => post.slug !== postToDelete.slug); 
+    const postlessJson = blogPosts.filter(post => post.slug !== postToDelete.slug);
+    // aggiorno l'array 
     jsonUpdater(postlessJson);
     res.send(`Hai eliminato ${postToDelete.title}`);
 };

@@ -9,7 +9,7 @@ const multer = require("multer");
 const storage = multer({dest: "public"});
 const postDataValidator = require("../middlewares/postDataValidator");
 const deleteAssistant = require("../middlewares/deleteAssistant");
-// importo il controller con le variabili middleware di autenticazione
+// importo il controller con i middleware di autenticazione
 const auth = require("../controllers/Auth");
 
 

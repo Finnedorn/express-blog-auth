@@ -1,3 +1,4 @@
+// funzione middleware per fare il catch di possibili errori e formattarli
 function errorFormatter(err, req, res, next){
     const statusCode = 500;
     res.format({

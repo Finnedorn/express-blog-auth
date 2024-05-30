@@ -56,16 +56,5 @@
       "Ricette vegetariane",
       "Ricette al forno"
     ]
-  },
-  {
-    "title": "Torto",
-    "slug": "torto",
-    "content": "ecco il nuovo piatto",
-    "image": "bffe352cebcedb033143fbc830acb732",
-    "tags": [
-      "Antipasti",
-      "Ricette vegetariane",
-      "Torte"
-    ]
   }
 ]
